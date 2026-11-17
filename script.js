@@ -12,7 +12,9 @@ const toast = document.getElementById('toast');
 let score = 0;
 let playing = false;
 let movementTimer = null;
+let countdownTimer = null;
 let toastTimer = null;
+let timeLeft = 30;
 
 const targetSize = 88;
 
@@ -71,7 +73,7 @@ function makeShot(fromX, fromY, toX, toY) {
   setTimeout(() => line.remove(), 260);
 }
 
-// Shoot function
+// Shooting function
 function shoot(event) {
   if (!playing) return;
 
@@ -89,7 +91,6 @@ function shoot(event) {
   crosshair.style.top = `${y}px`;
   crosshair.style.display = 'block';
 
-  // Bullet starts from bottom centre
   makeShot(
     rect.width / 2,
     rect.height - 12,
@@ -97,7 +98,6 @@ function shoot(event) {
     y
   );
 
-  // Check whether target was hit
   const hitRadius = targetSize * 0.58;
 
   if (Math.hypot(x - tx, y - ty) <= hitRadius) {
@@ -114,12 +114,52 @@ function registerHit() {
   scoreEl.textContent = String(score).padStart(2, '0');
 
   hitMessage.classList.remove('show');
-
   void hitMessage.offsetWidth;
-
   hitMessage.classList.add('show');
 
   showToast('Perfect shot! +1 kiss 💋');
+}
+
+// Start countdown
+function startCountdown() {
+  timeLeft = 30;
+
+  hint.textContent = `Time Left: ${timeLeft}s`;
+
+  countdownTimer = setInterval(() => {
+    timeLeft--;
+
+    hint.textContent = `Time Left: ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+// End game
+function endGame() {
+  playing = false;
+
+  clearInterval(movementTimer);
+  clearInterval(countdownTimer);
+
+  target.style.pointerEvents = 'none';
+
+  target.style.display = 'none';
+
+  hint.textContent = 'Time is up! ❤️';
+
+  startButton.textContent = 'PLAY AGAIN ♥';
+
+  showToast('Challenge completed! 💋');
+
+  // Final score message
+  setTimeout(() => {
+    alert(
+      `Time's Up! ❤️\n\nYou scored ${score} kisses! 💋\n\nNow give all these kisses to Piyush! ❤️😘`
+    );
+  }, 300);
 }
 
 // Start or restart game
@@ -130,21 +170,22 @@ function startGame() {
   playing = true;
 
   clearInterval(movementTimer);
+  clearInterval(countdownTimer);
 
   placeTarget();
 
-  // Automatically change target position every 500ms
+  // Target changes position every 0.5 seconds
   movementTimer = setInterval(() => {
     if (playing) {
       placeTarget();
     }
-  }, 300);
-
-  hint.textContent = 'Tap the target to shoot · hit = 1 kiss';
+  }, 500);
 
   startButton.textContent = 'RESTART GAME ♥';
 
   showToast('Let the kisses begin! 💋');
+
+  startCountdown();
 }
 
 // Button event
@@ -180,22 +221,13 @@ for (let i = 0; i < 12; i++) {
   const heart = document.createElement('span');
 
   heart.className = 'float-heart';
-
   heart.textContent = i % 2 ? '♥' : '♡';
 
   heart.style.left = `${Math.random() * 100}%`;
-
-  heart.style.bottom =
-    `${-10 - Math.random() * 90}px`;
-
-  heart.style.animationDelay =
-    `${Math.random() * 8}s`;
-
-  heart.style.animationDuration =
-    `${7 + Math.random() * 7}s`;
-
-  heart.style.fontSize =
-    `${10 + Math.random() * 15}px`;
+  heart.style.bottom = `${-10 - Math.random() * 90}px`;
+  heart.style.animationDelay = `${Math.random() * 8}s`;
+  heart.style.animationDuration = `${7 + Math.random() * 7}s`;
+  heart.style.fontSize = `${10 + Math.random() * 15}px`;
 
   hearts.appendChild(heart);
 }
