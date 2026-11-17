@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#170d22">
+  <title>Just For You ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <div class="ambient-glow glow-one"></div>
+    <div class="ambient-glow glow-two"></div>
+    <div class="hearts" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="eyebrow">A LITTLE GAME FOR YOU</div>
+      <div class="score-wrap">
+        <span class="score-label">KISSES COLLECTED</span>
+        <div class="score"><span id="score">00</span> <span class="score-heart">♥</span></div>
+      </div>
+    </header>
+
+    <section class="arena" id="arena" aria-label="Shooting game area">
+      <div class="arena-note">CATCH ME IF YOU CAN ✨</div>
+      <div class="target" id="target" role="button" aria-label="Your target">
+        <div class="target-ring"></div>
+        <img src="piyush.jpeg" alt="Target photo" draggable="false">
+        <span class="target-tag">YOUR TARGET</span>
+      </div>
+      <div class="hit-message" id="hitMessage">+1 KISS 💋</div>
+      <div class="crosshair" id="crosshair"><i></i></div>
+      <div class="bullet-layer" id="bulletLayer"></div>
+      <div class="arena-hint" id="hint">Tap anywhere in the arena to shoot</div>
+    </section>
+
+    <section class="shooter-panel">
+      <div class="shooter-caption"><span class="tiny-heart">♥</span> YOUR SHOOTER <span class="tiny-heart">♥</span></div>
+      <div class="shooter-row">
+        <div class="shooter-photo">
+          <img src="afsar.jpeg" alt="Afsar photo" draggable="false">
+          <span class="online-dot"></span>
+        </div>
+        <div class="shooter-copy">
+          <div class="shooter-name">AFSAR</div>
+          <div class="shooter-sub">Ready, aim… love! 💗</div>
+        </div>
+        <div class="gun" aria-hidden="true">⌁</div>
+      </div>
+      <button id="startButton" class="start-button">START GAME <span>♥</span></button>
+      <div class="footer-note">Every perfect hit = one kiss</div>
+    </section>
+  </main>
+  <div class="toast" id="toast">Nice shot! 💋</div>
+  <script src="script.js"></script>
+</body>
+</html>
