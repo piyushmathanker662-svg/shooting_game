@@ -138,7 +138,7 @@ function startGame() {
     if (playing) {
       placeTarget();
     }
-  }, 500);
+  }, 300);
 
   hint.textContent = 'Tap the target to shoot · hit = 1 kiss';
 
