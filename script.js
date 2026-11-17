@@ -18,7 +18,7 @@ let timeLeft = 30;
 
 const targetSize = 88;
 
-// Move target to a random position
+// Move target randomly
 function placeTarget() {
   const bounds = arena.getBoundingClientRect();
 
@@ -39,7 +39,7 @@ function placeTarget() {
   target.style.pointerEvents = 'auto';
 }
 
-// Show notification
+// Toast notification
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add('show');
@@ -114,13 +114,16 @@ function registerHit() {
   scoreEl.textContent = String(score).padStart(2, '0');
 
   hitMessage.classList.remove('show');
-  void hitMessage.offsetWidth;
-  hitMessage.classList.add('show');
+
+  // Keep normal hit animation separate from final result
+  if (!hitMessage.classList.contains('result-screen')) {
+    hitMessage.innerHTML = '';
+  }
 
   showToast('Perfect shot! +1 kiss 💋');
 }
 
-// Start countdown
+// Countdown timer
 function startCountdown() {
   timeLeft = 30;
 
@@ -137,7 +140,7 @@ function startCountdown() {
   }, 1000);
 }
 
-// End game
+// End game and show final result
 function endGame() {
   playing = false;
 
@@ -145,36 +148,51 @@ function endGame() {
   clearInterval(countdownTimer);
 
   target.style.pointerEvents = 'none';
-
   target.style.display = 'none';
 
-  hint.textContent = 'Time is up! ❤️';
-
+  hint.textContent = 'Challenge completed! ❤️';
   startButton.textContent = 'PLAY AGAIN ♥';
 
-  showToast('Challenge completed! 💋');
+  hitMessage.classList.add('result-screen');
+  hitMessage.classList.add('show');
 
-  // Final score message
-  setTimeout(() => {
-    alert(
-      `Time's Up! ❤️\n\nYou scored ${score} kisses! 💋\n\nNow give all these kisses to Piyush! ❤️😘`
-    );
-  }, 300);
+  hitMessage.innerHTML = `
+    <div class="result-content">
+      <h2>TIME'S UP! ❤️</h2>
+      <h1>${score} KISSES 💋</h1>
+      <p>You scored ${score} kisses!</p>
+      <p>Now give all these kisses to Piyush! ❤️😘</p>
+    </div>
+  `;
 }
 
 // Start or restart game
 function startGame() {
   score = 0;
+  timeLeft = 30;
+
   scoreEl.textContent = '00';
 
   playing = true;
 
   clearInterval(movementTimer);
   clearInterval(countdownTimer);
+  clearTimeout(toastTimer);
 
+  // Completely reset previous result
+  hitMessage.classList.remove('show');
+  hitMessage.classList.remove('result-screen');
+  hitMessage.innerHTML = '';
+
+  // Reset target
+  target.style.display = 'block';
+  target.style.opacity = '1';
+  target.style.pointerEvents = 'auto';
+
+  // Start at a random position
   placeTarget();
 
-  // Target changes position every 0.5 seconds
+  // Move target every 0.5 seconds
   movementTimer = setInterval(() => {
     if (playing) {
       placeTarget();
@@ -183,12 +201,15 @@ function startGame() {
 
   startButton.textContent = 'RESTART GAME ♥';
 
+  hint.textContent = 'Time Left: 30s';
+
   showToast('Let the kisses begin! 💋');
 
+  // Start 30-second countdown
   startCountdown();
 }
 
-// Button event
+// Start button
 startButton.addEventListener('click', startGame);
 
 // Shooting event
@@ -214,53 +235,22 @@ arena.addEventListener('pointerleave', () => {
   crosshair.style.display = 'none';
 });
 
-// Floating hearts in background
+// Floating hearts background
 const hearts = document.querySelector('.hearts');
 
-for (let i = 0; i < 12; i++) {
-  const heart = document.createElement('span');
+if (hearts) {
+  for (let i = 0; i < 12; i++) {
+    const heart = document.createElement('span');
 
-  heart.className = 'float-heart';
-  heart.textContent = i % 2 ? '♥' : '♡';
+    heart.className = 'float-heart';
+    heart.textContent = i % 2 ? '♥' : '♡';
 
-  heart.style.left = `${Math.random() * 100}%`;
-  heart.style.bottom = `${-10 - Math.random() * 90}px`;
-  heart.style.animationDelay = `${Math.random() * 8}s`;
-  heart.style.animationDuration = `${7 + Math.random() * 7}s`;
-  heart.style.fontSize = `${10 + Math.random() * 15}px`;
+    heart.style.left = `${Math.random() * 100}%`;
+    heart.style.bottom = `${-10 - Math.random() * 90}px`;
+    heart.style.animationDelay = `${Math.random() * 8}s`;
+    heart.style.animationDuration = `${7 + Math.random() * 7}s`;
+    heart.style.fontSize = `${10 + Math.random() * 15}px`;
 
-  hearts.appendChild(heart);
+    hearts.appendChild(heart);
+  }
 }
-
-
-#hitMessage.result-screen,
-#hitMessage.show {
-  animation: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-#hitMessage .result-content {
-  opacity: 1;
-  visibility: visible;
-  text-align: center;
-  padding: 20px;
-}
-
-#hitMessage .result-content h2 {
-  font-size: 26px;
-  color: #ffb6d9;
-}
-
-#hitMessage .result-content h1 {
-  font-size: 36px;
-  color: #ffffff;
-  margin: 15px 0;
-}
-
-#hitMessage .result-content p {
-  font-size: 16px;
-  color: #ffffff;
-  line-height: 1.5;
-}
-
