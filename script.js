@@ -231,3 +231,36 @@ for (let i = 0; i < 12; i++) {
 
   hearts.appendChild(heart);
 }
+
+
+#hitMessage.result-screen,
+#hitMessage.show {
+  animation: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#hitMessage .result-content {
+  opacity: 1;
+  visibility: visible;
+  text-align: center;
+  padding: 20px;
+}
+
+#hitMessage .result-content h2 {
+  font-size: 26px;
+  color: #ffb6d9;
+}
+
+#hitMessage .result-content h1 {
+  font-size: 36px;
+  color: #ffffff;
+  margin: 15px 0;
+}
+
+#hitMessage .result-content p {
+  font-size: 16px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
